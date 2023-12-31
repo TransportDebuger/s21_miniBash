@@ -2,12 +2,17 @@
 #define COMMON_H
 
 
-struct modifier{
+struct settings{
     int position;
     char parameter;
 };
 
+#ifdef DEBUG
+void printParameters(int inArgc, char** inArgv);
+#endif
 
-struct modifier** getModifiers(int modc, char** modv);
+int getSettingsCount(int inArgc, char** inArgv);
+
+struct settings** parseModifiers(int modc, char** modv);
 
 #endif
