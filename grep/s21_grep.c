@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-#include "../common/common.h"
+#include "../common/s21_getopt.h"
 
 
 int main(int argc, char** argv) {
-    struct modifier** mod;
+    int errCode = 0;
 
-    return 0;
+    return errCode;
 }

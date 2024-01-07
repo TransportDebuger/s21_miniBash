@@ -1,21 +1,35 @@
 CC = gcc
-FLAGS = -Werror -Wextra -Wall -std=c11
-TCAT = 
-TGREP = 
+CFLAGS = -Werror -Wextra -Wall -std=c11
+COMMON_SRC = common\
+COMMON_OBJ = common\obj\
+CAT_SRC = .\cat\
+CAT_OBJ = .\cat\obj\
+CAT_TARGET = .\cat\
+GREP_SRC = .\grep\
+GREP_OBJ = .\grep\obj\
+GREP_TARGET = .\grep\
 
-s21_cat: common.o
 
-s21_grep: common.o
-	$(CC) $(FLAGS) common.o -o $(BUILD_PATH)$(TARGET1)
+all: s21_cat s21_grep
 
-common.o:
-	${CC} $(FLAGS) -c ./common/common.c
+debug: s21_cat_debug s21_grep_debug
 
-cipher: cipher.o
-	$(CC) $(FLAGS) cipher.o -o $(BUILD_PATH)$(TARGET1)
+s21_cat: common
 
-cipher.o:
-	$(CC) $(FLAGS) -c cipher.c
+s21_cat_debug:
+
+s21_grep: common
+
+s21_grep_debug:
+
+common: common_obj_dir
+	${CC} $(CFLAGS) -c $(COMMON_SRC)common.c=$(COMMON_OBJ)common.o
+
+common_debug:
+	$(CC) $(CFLAGS) -DDEBUG -c $(COMMON_SRC)common.c=$(COMMON_OBJ)common.o
+
+common_obj_dir:
+	mkdir -p $(COMMON_OBJ)
 
 clean:
 	rm -rf *.o
