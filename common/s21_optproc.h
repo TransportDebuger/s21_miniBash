@@ -1,14 +1,19 @@
 #ifndef S21_OPTPROC_H
 #define S21_OPTPROC_H
 
-#include "s21_froutines.h"
+typedef struct fileList FLIST;
+struct fileList {
+  int count;
+  char** path;
+};
 
-struct options {
+FLIST* allocatePaths();
+void deallocPaths(FLIST* inFileList);
+
+/*struct options {
   char* longName;
   int haveArg;
   char shortName;
-};
-
-int parseCli(int inArgc, char** inArgv, int* outOptc, FLIST* outFileList);
+};*/
 
 #endif
