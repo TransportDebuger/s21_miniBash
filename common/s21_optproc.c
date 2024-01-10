@@ -10,7 +10,7 @@ FLIST* allocatePaths() {
 
 void deallocPaths(FLIST* inFileList) {
   if (inFileList->path != NULL) {
-
+    
   }
   free(inFileList);
 }

@@ -2,50 +2,99 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
+
+int setParameters(char* optstr, OptList* optList) {
+  int err = 0;
+  if (optstr[1] == '-') {
+    #ifdef __APPLE
+      err++;
+      printf("there are not any function to print error message about illegal parameter\n");
+      printf("Sample: cat: illegal option -- \"option\"\nusage: cat [-benstuv] [file ...]\n");
+    #else
+      printf("POSIX options processing here");
+    #endif
+    
+    // parse parameters posix-type ("--parameter")
+  } else {
+    for (int c = 1; c < strlen(optstr) && !err; c++) {
+      switch (optstr[c]) {
+        case 'b': 
+          optList->strnumnbl = 1;
+          break;
+        case 'n': 
+          optList->strnum = 1;
+          break;
+        case 's': 
+          optList->sblank = 1;
+          break;
+        case 'v':
+          optList->shownpr = 1;
+          break;
+      #ifdef __APPLE
+        case 'e':
+          optList->showends = 1;
+          break;
+        case 't':
+          optList->showtabs = 1;
+          break;
+      #else
+        case 'e':
+          optList->showends = 1;
+          optList->shownpr = 1;
+          break;
+        case 'E':
+          optList->showends = 1;
+          break;
+        case 't':
+          optList->showtabs = 1;
+          optList->shownpr = 1;
+          break;
+        case 'T':
+          optList->showtabs = 1;
+          break;
+        case 'A':
+          optList->showtabs = 1;
+          optList->shownpr = 1;
+          optList->showends = 1;
+          break;
+      #endif
+
+        default :
+          err++;
+          printf("error \n");
+      }
+    }
+  }
+  return err;
+}
 
 OptList* parseCli(int inArgc, char** inArgv, OptList* optList, int* errCode) {
   optList = allocateOptList();
-  int optcount = 0;
+  optList->help = 0;
+  optList->version = 0;
+  optList->shownpr = 0;
+  optList->showtabs = 0;
+  optList->showends = 0;
+  optList->strnum = 0;
+  optList->strnumnbl = 0;
+  optList->sblank = 0;
 
   if (inArgc != 1) {
     for (int c = 1; c < inArgc; c++) {
       if (inArgv[c][0] == '-' && inArgv[c][1] != '\0') {
-        optcount++;
+        *errCode = setParameters(inArgv[c], optList);
       } else {
         optList->pathList->count++;
       }
     }
   }
-/*
-  if (optList->pathList->count == 0) {
-    optList->pathList->count++;
-  }
-*/
-  printf("opt count %d\n", optcount);
+
   printf("file count %d\n", optList->pathList->count);
 
   return optList;
 }
-
-/*
-  while (count < inArgc && !errCode) {
-    if (inArgv[count][0] == '-') {
-      if (inArgv[count][1] == '\0') {
-        ++outPathList->count;
-        //addPath(inArgv[count], outPathList->count, outPathList);
-      } else {
-        *outOptc+=1;
-      }
-    } else {
-      ++outPathList->count;
-      //addPath(inArgv[count], outPathList->count, outPathList);
-    }
-    ++count;
-  }
-  if (outPathList->count == 0) {
-    outPathList->count++;
-    //addPath("-", outPathList->count, outPathList);
-  }*/
 
 OptList* allocateOptList() {
   OptList* opt = malloc(sizeof(OptList));

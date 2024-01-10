@@ -12,7 +12,8 @@ void printVersion();
 
 int main(int argc, char** argv) {
   int errCode = 0;
-  OptList* options = parseCli(argc, argv, options, &errCode);
+  OptList* options = NULL;
+  options = parseCli(argc, argv, options, &errCode);
   
   if (options->help) printHelp();
   else if (options->version) printVersion();
@@ -20,6 +21,6 @@ int main(int argc, char** argv) {
     // --> Обработка чтения списка файлов
   } else printFile(stdin);
   
-  if (!options) deallocOptList(options);
+  if (options) deallocOptList(options);
   return errCode;
 }
