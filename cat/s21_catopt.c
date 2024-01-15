@@ -13,7 +13,28 @@ int setParameters(char* optstr, OptList* optList) {
       printf("there are not any function to print error message about illegal parameter\n");
       printf("Sample: cat: illegal option -- \"option\"\nusage: cat [-benstuv] [file ...]\n");
     #else
-      printf("POSIX options processing here");
+      if (!strcmp("--show-all", optstr)) {
+        optList->showtabs = 1;
+        optList->shownpr = 1;
+        optList->showends = 1;        
+      } else if (!strcmp("--number-nonblank", optstr)) {
+        optList->strnum = 0;
+        optList->strnumnbl = 1;
+      } else if (!strcmp("--number", optstr)) {
+        optList->strnum = 1;
+      } else if (!strcmp("--show-ends", optstr)) {
+        optList->showends = 1;
+      } else if (!strcmp("--squeeze-blank", optstr)) {
+        optList->sblank = 1;
+      } else if (!strcmp("--show-tabs", optstr)) {
+        optList->showtabs = 1;
+      } else if (!strcmp("--show-nonprinting", optstr)) {
+        optList->shownpr = 1;
+      } else if (!strcmp("--help", optstr)) {
+        optList->help = 1;
+      } else if (!strcmp("--version", optstr)) {
+        optList->version = 1;
+      }
     #endif
     
     // parse parameters posix-type ("--parameter")
@@ -21,6 +42,7 @@ int setParameters(char* optstr, OptList* optList) {
     for (int c = 1; c < strlen(optstr) && !err; c++) {
       switch (optstr[c]) {
         case 'b': 
+          optList->strnum = 0;
           optList->strnumnbl = 1;
           break;
         case 'n': 
@@ -60,7 +82,6 @@ int setParameters(char* optstr, OptList* optList) {
           optList->showends = 1;
           break;
       #endif
-
         default :
           err++;
           printf("error \n");
@@ -87,6 +108,7 @@ OptList* parseCli(int inArgc, char** inArgv, OptList* optList, int* errCode) {
         *errCode = setParameters(inArgv[c], optList);
       } else {
         optList->pathList->count++;
+        //filelist processing
       }
     }
   }
