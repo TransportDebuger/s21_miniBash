@@ -39,7 +39,7 @@ int setParameters(char* optstr, OptList* optList) {
     
     // parse parameters posix-type ("--parameter")
   } else {
-    for (int c = 1; c < strlen(optstr) && !err; c++) {
+    for (unsigned int c = 1; c < strlen(optstr) && !err; c++) {
       switch (optstr[c]) {
         case 'b': 
           optList->strnum = 0;
@@ -106,6 +106,7 @@ OptList* parseCli(int inArgc, char** inArgv, OptList* optList, int* errCode) {
     for (int c = 1; c < inArgc; c++) {
       if (inArgv[c][0] == '-' && inArgv[c][1] != '\0') {
         *errCode = setParameters(inArgv[c], optList);
+        if (optList->help || optList->version) break;
       } else {
         optList->pathList->count++;
         //filelist processing

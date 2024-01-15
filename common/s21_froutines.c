@@ -12,4 +12,4 @@ void printFile(FILE* inFile) {
     putc(c, stdout);
     c = fgetc(inFile);
   }
-};
+}

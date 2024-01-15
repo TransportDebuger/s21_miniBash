@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Werror -Wextra -Wall -std=c11
+CFLAGS = -Werror -Wextra -Wall -std=c11 -pedantic
 
 all: s21_cat
 
