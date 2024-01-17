@@ -109,7 +109,7 @@ OptList* parseCli(int inArgc, char** inArgv, OptList* optList, int* errCode) {
         if (optList->help || optList->version) break;
       } else {
         optList->pathList->count++;
-        //filelist processing
+        optList->pathList->path = addPath(optList->pathList->path, inArgv[c]);
       }
     }
   }
@@ -130,6 +130,6 @@ OptList* allocateOptList() {
 }
 
 void deallocOptList(OptList* inOptList) {
-    if (!(inOptList->pathList)) deallocPaths(inOptList->pathList);
+    if (inOptList->pathList != NULL) deallocPaths(inOptList->pathList);
     free(inOptList);
 }

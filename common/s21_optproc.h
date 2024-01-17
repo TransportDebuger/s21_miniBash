@@ -8,6 +8,7 @@ struct fileList {
 };
 
 FLIST* allocatePaths();
+char** addPath(char** flist, char* fname);
 void deallocPaths(FLIST* inFileList);
 
 /*struct options {

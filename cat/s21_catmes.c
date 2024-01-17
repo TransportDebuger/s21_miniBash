@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-void printHelp() {
+void printHelp(void) {
   printf("Usage: s21_cat [OPTION]... [FILE]...\n");
   printf("Concatenate FILE(s) to standard output.\n\n");
   printf("With no FILE, or when FILE is -, read standard input.\n\n");
@@ -27,7 +27,7 @@ void printHelp() {
   printf("  cat        Copy standard input to standard output.\n\n");
 }
 
-void printVersion() {
+void printVersion(void) {
   printf("s21_cat 1.0\n");
   printf("Written by Artem Ulianov (provemet)\n\n");
 }

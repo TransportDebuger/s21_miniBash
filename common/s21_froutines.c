@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 
+FILE* openFile(char* fname) {
+  FILE* f;
+
+  return f;
+}
+
 void printFile(FILE* inFile) {
   int c = fgetc(inFile);
   // Output modifiers needed

@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+
+FILE* openFile(char* fname);
 void printFile(FILE* inFile);
 
 #endif

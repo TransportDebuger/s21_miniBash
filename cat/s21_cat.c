@@ -21,6 +21,6 @@ int main(int argc, char** argv) {
     // --> Обработка чтения списка файлов
   } else printFile(stdin);
   
-  if (options) deallocOptList(options);
+  if (options != NULL) deallocOptList(options);
   return errCode;
 }
