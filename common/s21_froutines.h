@@ -3,8 +3,11 @@
 
 #include <stdio.h>
 
+#include "s21_optproc.h"
+
 
 FILE* openFile(char* fname);
-void printFile(FILE* inFile);
+void printFile(FILE* inFile, OptList* popt);
+void closeFile(FILE* pfile);
 
 #endif

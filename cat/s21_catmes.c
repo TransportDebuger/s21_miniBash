@@ -23,11 +23,12 @@ void printHelp(void) {
   printf("      --help     display this help and exit\n");
   printf("      --version  output version information and exit\n\n");
   printf("Examples:\n");
-  printf("  cat f - g  Output f's contents, then standard input, then g's contents.\n");
+  printf(
+      "  cat f - g  Output f's contents, then standard input, then g's "
+      "contents.\n");
   printf("  cat        Copy standard input to standard output.\n\n");
 }
 
 void printVersion(void) {
-  printf("s21_cat 1.0\n");
-  printf("Written by Artem Ulianov (provemet)\n\n");
+  printf("s21_cat 1.0\n Written by Artem Ulianov (provemet)\n\n");
 }

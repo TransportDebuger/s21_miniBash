@@ -1,14 +1,12 @@
 #ifndef S21_OPTPROC_H
 #define S21_OPTPROC_H
 
-typedef struct fileList FLIST;
-struct fileList {
-  int count;
-  char** path;
-};
+#include <stdio.h>
+
+#include "s21_ctypedef.h"
 
 FLIST* allocatePaths();
-char** addPath(char** flist, char* fname);
+char** addPath(char** flist, char* fname, const int fcount);
 void deallocPaths(FLIST* inFileList);
 
 /*struct options {
