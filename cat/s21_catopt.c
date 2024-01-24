@@ -6,6 +6,47 @@
 
 #include "../common/s21_ctypedef.h"
 
+OptList* parseOptions(int pcount, char** pArgs) {
+  OptList* opt = malloc(sizeof(OptList));
+
+  if (opt) {
+    *opt = initOptList();
+    for (int c = 1; c < pcount; c++) {
+      int err = 0;
+      if (pArgs[c][0] == '-') {
+        if ((err = setParameters(pArgs[c], opt)) != 0) {
+          deallocOptList(opt);
+          opt = NULL;
+          break;
+        }
+      }
+    }
+  }
+
+  return opt;
+}
+
+OptList initOptList() {
+#ifdef APPLE
+  OptList init = {.shownpr = 0,
+                  .showtabs = 0,
+                  .showends = 0,
+                  .strnum = 0,
+                  .strnumnbl = 0,
+                  .sblank = 0};
+#else
+  OptList init = {.help = 0,
+                  .version = 0,
+                  .shownpr = 0,
+                  .showtabs = 0,
+                  .showends = 0,
+                  .strnum = 0,
+                  .strnumnbl = 0,
+                  .sblank = 0};
+#endif
+
+  return init;
+}
 
 int setParameters(char* optstr, OptList* optList) {
   int err = 0;
@@ -97,51 +138,6 @@ int setParameters(char* optstr, OptList* optList) {
   return err;
 }
 
-
-/*OptList* parseCli(int inArgc, char** inArgv, OptList* optList, int* errCode) {
-  optList = allocateOptList();
-
-  if (inArgc != 1) {
-    for (int c = 1; c < inArgc; c++) {
-      if (inArgv[c][0] == '-' && inArgv[c][1] != '\0') {
-        *errCode = setParameters(inArgv[c], optList);
-        #ifndef APPLE
-        if (optList->help || optList->version) break;
-        #endif
-      } else {
-        optList->pathList->count++;
-        optList->pathList->path = addPath(optList->pathList->path, inArgv[c], optList->pathList->count);
-      }
-    }
-  }
-
-  //printf("file count %d\n", optList->pathList->count);
-
-  return optList;
-}*/
-
-
-OptList* allocateOptList() {
-  OptList* opt = malloc(sizeof(OptList));
-
-  if (opt) {
-    opt->pathList = allocatePaths();
-    #ifndef APPLE
-    opt->help = 0;
-    opt->version = 0;
-    #endif
-    opt->shownpr = 0;
-    opt->showtabs = 0;
-    opt->showends = 0;
-    opt->strnum = 0;
-    opt->strnumnbl = 0;
-    opt->sblank = 0;
-  }
-
-  return opt;
-}
-
 void deallocOptList(OptList* inOptList) {
-  if (inOptList->pathList != NULL) deallocPaths(inOptList->pathList);
   free(inOptList);
 }

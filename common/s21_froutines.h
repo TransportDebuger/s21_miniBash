@@ -5,7 +5,6 @@
 
 #include "s21_optproc.h"
 
-
 FILE* openFile(char* fname);
 void printFile(FILE* inFile, OptList* popt);
 void closeFile(FILE* pfile);

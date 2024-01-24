@@ -22,6 +22,4 @@ void printFile(FILE* inFile, OptList* popt) {
   }
 }
 
-void closeFile(FILE* file) {
-  fclose(file);
-}
+void closeFile(FILE* file) { fclose(file); }
