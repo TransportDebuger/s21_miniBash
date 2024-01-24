@@ -11,13 +11,14 @@
 
 int main(int argc, char** argv) {
   OptList* opt = parseOptions(argc, argv);
+  int errCode = 0;
   if (opt) {
     FLIST* files;
-    int errCode = 0;
     deallocOptList(opt);
+  } else {
+    errCode++;
   }
   // FILE* pfile;
-  // options = parseCli(argc, argv, options, &errCode);
   /*
   if (!errCode) {
   #ifndef APPLE
@@ -38,6 +39,6 @@ int main(int argc, char** argv) {
     } else
       printFile(stdin, options);
     }*/
-    
-  return 0;  //возврат кода ошибки должен быть здесь
+
+  return errCode;  //возврат кода ошибки должен быть здесь
 }
