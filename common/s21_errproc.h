@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void printErrorMsg(char* errMsg);
+void printErrorMsg(char* progname, char* errMsg, char* errValue);
 
 #endif

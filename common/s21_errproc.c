@@ -2,10 +2,6 @@
 
 #include <stdio.h>
 
-void printErrorMsg(char* errMsg) {
-  int i = 0;
-  while (errMsg[i] != '\0') {
-    putchar(errMsg[i]);
-    ++i;
-  }
+void printErrorMsg(char* progname, char* errMsg, char* errValue) {
+  printf(errMsg, progname, errValue);
 }

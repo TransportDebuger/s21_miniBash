@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "s21_cat.h"
 #include "../common/s21_ctypedef.h"
+#include "../common/s21_errproc.h"
 
-OptList* parseOptions(int pcount, char** pArgs) {
+OptList* parseOptions(const int pcount, char** pArgs) {
   OptList* opt = malloc(sizeof(OptList));
 
   if (opt) {
@@ -17,6 +19,9 @@ OptList* parseOptions(int pcount, char** pArgs) {
         if ((err = setParameters(pArgs[c], opt)) != 0) {
           deallocOptList(opt);
           opt = NULL;
+          break;
+        }
+        if (opt->help == 1 || opt->version == 1) {
           break;
         }
       }
@@ -131,13 +136,11 @@ int setParameters(char* optstr, OptList* optList) {
 #endif
         default:
           err++;
-          printf("error \n");
+          printErrorMsg(PROGNAME, WRONG_OPT, &(optstr[c]));
       }
     }
   }
   return err;
 }
 
-void deallocOptList(OptList* inOptList) {
-  free(inOptList);
-}
+void deallocOptList(OptList* inOptList) { free(inOptList); }

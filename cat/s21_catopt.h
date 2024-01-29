@@ -2,7 +2,6 @@
 #define S21_CATOPT_H
 
 #include "../common/s21_ctypedef.h"
-#include "../common/s21_optproc.h"
 
 struct option {
 #ifndef APPLE

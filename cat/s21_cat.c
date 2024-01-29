@@ -2,43 +2,58 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../common/s21_ctypedef.h"
+#include "../common/s21_errproc.h"
 #include "../common/s21_froutines.h"
-#include "../common/s21_optproc.h"
-#include "s21_catmes.h"
 #include "s21_catopt.h"
+#include "s21_catmes.h"
+
+// under reconstruction
+#include "../common/s21_optproc.h"
+
 
 int main(int argc, char** argv) {
   OptList* opt = parseOptions(argc, argv);
   int errCode = 0;
+
   if (opt) {
-    FLIST* files;
+    
+#ifndef APPLE
+    if (opt->help == 1)
+      printHelp();
+    else if (opt->version == 1)
+      printVersion();
+    else
+#endif
+    {
+      if (argc == 1) {
+        printFile(stdin, opt);
+      } else {
+        short int fd = 0;
+        for (int c = 1; c < argc; c++) {
+          if (argv[c][0] != '-') {
+            FILE* f;
+            fd++;
+            if ((f = fopen(argv[c], "r")) != NULL) { 
+              printFile(f, opt); 
+              fclose(f);
+            } else {
+              printErrorMsg(PROGNAME, WRONG_FILE, argv[c]);
+            }
+          } else if (strcmp("-", argv[c]) == 0 || strcmp("--", argv[c]) == 0) {
+            fd++;
+            printFile(stdin, opt);  
+          }
+        }
+        if (!fd) {printFile(stdin, opt);}
+      }    
+    }
     deallocOptList(opt);
   } else {
     errCode++;
   }
-  // FILE* pfile;
-  /*
-  if (!errCode) {
-  #ifndef APPLE
-    if (options->help)
-      printHelp();
-    else if (options->version)
-     printVersion();
-    else
-  #endif
-    if (options->pathList->count) {
-      for (int c = 0; c < options->pathList->count; c++) {
-        if (options->pathList->path[c][0] == '-') printFile(stdin, options);
-        else {
-          if ((pfile = openFile(options->pathList->path[c])) != NULL)
-  printFile(pfile, options); else printf("file not found\n"); closeFile(pfile);
-        }
-      }
-    } else
-      printFile(stdin, options);
-    }*/
-
-  return errCode;  //возврат кода ошибки должен быть здесь
+  
+  return errCode;
 }
