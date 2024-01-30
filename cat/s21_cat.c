@@ -6,12 +6,15 @@
 
 #include "../common/s21_ctypedef.h"
 #include "../common/s21_errproc.h"
-#include "../common/s21_froutines.h"
+#include "s21_fileproc.h"
 #include "s21_catopt.h"
-#include "s21_catmes.h"
+
+#ifndef APPLE
+  #include "s21_catmes.h"
+#endif
 
 // under reconstruction
-#include "../common/s21_optproc.h"
+//#include "../common/s21_optproc.h"
 
 
 int main(int argc, char** argv) {
@@ -28,6 +31,7 @@ int main(int argc, char** argv) {
     else
 #endif
     {
+      //надо немного переделать, что бы не выбраться за правило максимального уровня вложенности
       if (argc == 1) {
         printFile(stdin, opt);
       } else {
