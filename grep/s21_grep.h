@@ -3,4 +3,6 @@
 
 #define PROGNAME "S21_CAT"
 
+#define WRONG_OPT "%s: unrecognized option \'%s\'\n"
+
 #endif
