@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "s21_cat.h"
 #include "../common/s21_ctypedef.h"
 #include "../common/s21_errproc.h"
+#include "s21_cat.h"
 
 OptList* parseOptions(const int pcount, char** pArgs) {
   OptList* opt = malloc(sizeof(OptList));
@@ -58,12 +58,8 @@ int setParameters(char* optstr, OptList* optList) {
   if (optstr[1] == '-') {
 #ifdef APPLE
     err++;
-    printf(
-        "there are not any function to print error message about illegal "
-        "parameter\n");
-    printf(
-        "Sample: cat: illegal option -- \"option\"\nusage: cat [-benstuv] "
-        "[file ...]\n");
+    printErrorMsg(PROGNAME, WRONG_OPT, optstr);
+    printf("usage: cat [-benstuv] [file ...]\n");
 #else
     if (!strcmp("--show-all", optstr)) {
       optList->showtabs = 1;
@@ -86,6 +82,8 @@ int setParameters(char* optstr, OptList* optList) {
       optList->help = 1;
     } else if (!strcmp("--version", optstr)) {
       optList->version = 1;
+    } else {
+      printErrorMsg(PROGNAME, WRONG_OPT, optstr);
     }
 #endif
 

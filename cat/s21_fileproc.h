@@ -5,12 +5,11 @@
 
 #include "../common/s21_ctypedef.h"
 
-//FLIST* createFileList(const int pcount, char** pArgs);
-//void destroyFileList(FLIST* flist);
+// FLIST* createFileList(const int pcount, char** pArgs);
+// void destroyFileList(FLIST* flist);
 
-//FILE* openFile(char* fname);
+// FILE* openFile(char* fname);
 void printFile(FILE* inFile, OptList* popt);
-//void closeFile(FILE* pfile);
-
+// void closeFile(FILE* pfile);
 
 #endif

@@ -3,7 +3,7 @@
 
 #include "../common/s21_ctypedef.h"
 
-struct option {
+struct options {
 #ifndef APPLE
   short int help;     //--help (Linux)
   short int version;  //--version (Linux)

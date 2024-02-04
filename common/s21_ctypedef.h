@@ -1,15 +1,11 @@
 #ifndef S21_CTYPEDEF_H
 #define S21_CTYPEDEF_H
 
-#include <stdio.h>
+typedef struct options OptList;
 
-typedef struct option OptList;
-
-typedef struct fileList FLIST;
-struct fileList {
+typedef struct stringlist {
   int count;
-  char** fnames;
-  FILE** files;
-};
+  char** fname;
+} list;
 
 #endif

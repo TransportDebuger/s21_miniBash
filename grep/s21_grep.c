@@ -1,20 +1,27 @@
+#include "s21_grep.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../common/s21_ctypedef.h"
+#include "../common/s21_errproc.h"
 #include "s21_grepopt.h"
-//#include "../common/s21_getopt.h"
-
+// #include "../common/s21_getopt.h"
 
 int main(int argc, char** argv) {
-    int errCode = 0;
-    OptList* opt = getOptions(argc, argv);
+  int errCode = 0;
+  OptList* opt = getOptions(argc, argv);
+  printf("%p\n", opt);
+  if (opt) {
+    // test patternlist
+    /*for (int c =0; c < opt->patternlist->count; c++) {
+      printf("%p %s\n", opt->patternlist->fname[c], opt->patternlist->fname[c]);
+    }*/
+    errCode = 0;
+  } else {
+    errCode++;
+  }
 
-    if (opt) {
-
-    } else {
-        errCode++;
-    }
-
-
-    return errCode;
+  destroyOptions(opt);
+  return errCode;
 }
