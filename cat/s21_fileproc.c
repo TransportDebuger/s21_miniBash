@@ -5,6 +5,8 @@
 #include "../common/s21_ctypedef.h"
 #include "s21_catopt.h"
 
+#define HIGHBIT 128
+
 void printSymbol(char c, OptList* popt) {
   if (c == '\n') {
     if (popt->showends)
@@ -16,22 +18,14 @@ void printSymbol(char c, OptList* popt) {
       printf("^I");
     else
       putc(c, stdout);
-  } else if (c < 32 || c == 127) {
-    if (popt->shownpr) {
-      putc('^', stdout);
-      putc(c + 64, stdout);
-    } else {
-      putc(c, stdout);
-    }
-  } else if (c > 127) {  // some reworks needed
-    if (popt->shownpr) {
-      printf("M-");
-      putc(c - 128 + 64, stdout);
-    } else {
-      putc(c, stdout);
-    }
+  } else if ((c & HIGHBIT)) {
+    printf("M-");
+    c = (c & (~HIGHBIT));
+    if (c < 32) printf("^%c", c + 64);
+    else putchar(c);
   } else {
-    putc(c, stdout);
+    if (c < 32) printf("^%c", c + 64);
+    else putchar(c);
   }
 }
 
@@ -48,9 +42,7 @@ void printFile(FILE* inFile, OptList* popt) {
         blineprn = 1;
       else
         blineprn = 0;
-      if ((popt->strnum && !(popt->strnumnbl) ||
-           (popt->strnumnbl && c != '\n')) &&
-          prevc == '\n') {
+      if (((popt->strnum && !(popt->strnumnbl)) || (popt->strnumnbl && c != '\n')) && prevc == '\n') {
         printf("%6d\t", linecount);
         linecount++;
       }
