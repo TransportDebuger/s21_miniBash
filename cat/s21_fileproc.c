@@ -1,7 +1,7 @@
 #include "s21_fileproc.h"
 
 #include <stdio.h>
-// #include <stdlib.h>
+
 #include "../common/s21_ctypedef.h"
 #include "s21_catopt.h"
 
@@ -21,11 +21,15 @@ void printSymbol(char c, OptList* popt) {
   } else if ((c & HIGHBIT)) {
     printf("M-");
     c = (c & (~HIGHBIT));
-    if (c < 32) printf("^%c", c + 64);
-    else putchar(c);
+    if (c < 32)
+      printf("^%c", c + 64);
+    else
+      putchar(c);
   } else {
-    if (c < 32) printf("^%c", c + 64);
-    else putchar(c);
+    if (c < 32)
+      printf("^%c", c + 64);
+    else
+      putchar(c);
   }
 }
 
@@ -34,7 +38,6 @@ void printFile(FILE* inFile, OptList* popt) {
   char prevc = '\n';
   static int linecount = 1;
   short int blineprn = 0;
-  // Output modifiers needed
 
   while (c != EOF) {
     if (!(popt->sblank && prevc == '\n' && c == '\n' && blineprn)) {
@@ -42,7 +45,9 @@ void printFile(FILE* inFile, OptList* popt) {
         blineprn = 1;
       else
         blineprn = 0;
-      if (((popt->strnum && !(popt->strnumnbl)) || (popt->strnumnbl && c != '\n')) && prevc == '\n') {
+      if (((popt->strnum && !(popt->strnumnbl)) ||
+           (popt->strnumnbl && c != '\n')) &&
+          prevc == '\n') {
         printf("%6d\t", linecount);
         linecount++;
       }

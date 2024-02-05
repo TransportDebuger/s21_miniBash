@@ -1,6 +1,5 @@
 #include "s21_catopt.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -86,8 +85,6 @@ int setParameters(char* optstr, OptList* optList) {
       printErrorMsg(PROGNAME, WRONG_OPT, optstr);
     }
 #endif
-
-    // parse parameters posix-type ("--parameter")
   } else {
     for (unsigned int c = 1; c < strlen(optstr) && !err; c++) {
       switch (optstr[c]) {

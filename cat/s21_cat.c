@@ -1,20 +1,14 @@
-#include "s21_cat.h"
-
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
+#include "s21_cat.h"
 #include "../common/s21_ctypedef.h"
 #include "../common/s21_errproc.h"
 #include "s21_catopt.h"
 #include "s21_fileproc.h"
 
 #ifndef APPLE
-#include "s21_catmes.h"
+  #include "s21_catmes.h"
 #endif
-
-// under reconstruction
-// #include "../common/s21_optproc.h"
 
 int main(int argc, char** argv) {
   OptList* opt = parseOptions(argc, argv);
