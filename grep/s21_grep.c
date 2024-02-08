@@ -10,13 +10,13 @@
 
 int main(int argc, char** argv) {
   int errCode = 0;
-  OptList* opt = getOptions(argc, argv);
+  OptList* opt = NULL;
+  opt = getOptions(argc, argv);
   printf("%p\n", opt);
   if (opt) {
-    // test patternlist
-    /*for (int c =0; c < opt->patternlist->count; c++) {
-      printf("%p %s\n", opt->patternlist->fname[c], opt->patternlist->fname[c]);
-    }*/
+    for (int c = 0; c < opt->patternlist->count; c++) {
+      printf("%s\n", opt->patternlist->fname[c]);
+    }
     errCode = 0;
   } else {
     errCode++;

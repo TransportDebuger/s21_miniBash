@@ -51,10 +51,16 @@ OptList* getOptions(int acount, char** args) {
       while((optleter = getopt_long(acount, args, shortopt, longopt, NULL)) != -1 && !fstop) {
         switch (optleter) {
             case 'e':
-                opt->patternlist = getPattern(opt->patternlist, optarg);
+                if (!opt->patternlist) {
+                  opt->patternlist = malloc(sizeof(list));
+                  opt->patternlist->count = 0;
+                  opt->patternlist->fname = NULL;
+                }
+                printf("%p\n", opt->patternlist);
+                getPattern(opt->patternlist, optarg);
                 break;
-            case 'f':
-                opt->patternlist = getPatternFromFile(opt->patternlist, optarg); //files parsing
+            //case 'f':
+                //opt->patternlist = getPatternFromFile(opt->patternlist, optarg); //files parsing
                 break;
             case 'i':
                 opt->caseinsensitive = 1;
@@ -80,7 +86,8 @@ OptList* getOptions(int acount, char** args) {
             case 'o':
                 opt->printonlyparts = 1;
                 break;
-            case '?': printErrorMsg(PROGNAME, WRONG_OPT, &optleter);
+            case '?': 
+                printErrorMsg(PROGNAME, WRONG_OPT, &optleter);
             default :
                 printf("USAGE ...\n");    
                 fstop = 1;
@@ -95,7 +102,7 @@ OptList* getOptions(int acount, char** args) {
 
 void destroyOptions(OptList* opt) {
   if (opt) {
-    destroyPatternList(opt->patternlist);
+    if (opt->patternlist) free(opt->patternlist);
     free(opt);
   }
 }
@@ -108,40 +115,29 @@ list* getPatternFromFile(list* patternlist, char* patternfile) {
       //read patterns by line from file
       while (feof(pf) == 0) {
         char str[256];
-        char* linebuffer = fgets(str, sizeof(str), pf);
-        printf("linebuffer filled: %s", linebuffer);
-        //patternlist = getPattern(patternlist, linebuffer);
+        //printf("linebuffer filled: %s", linebuffer);
+        getPattern(patternlist, fgets(str, sizeof(str), pf));
       }
     } else {
       printErrorMsg(PROGNAME, WRONG_FILE, patternfile);
     }
-    fclose(pf);
+    if (pf) fclose(pf);
     wasFile++;
   }
+  printf("pl:%p", patternlist);
   return patternlist;
 }
 
-list* getPattern(list* patternlist, char* pattern) {
-  if (!patternlist) {
-    patternlist =  malloc(sizeof(list));
-    patternlist->count = 0;
-  }
-  patternlist->fname = realloc(patternlist->fname, patternlist->count * sizeof(char*));
-  patternlist->fname[patternlist->count] = pattern;
-  patternlist->count++;
-  return patternlist;
-}
-
-void destroyPatternList(list* patternlist) {
+void getPattern(list* patternlist, char* pattern) {
+  //char* line = strcpy(line, pattern);
   if (patternlist) {
-    if (patternlist->fname) {
-      for (int c = 0; c < patternlist->count; c++) {
-        free(patternlist->fname[c]);
-      }
-    }
-    free(patternlist);
+    patternlist->count++;
+    patternlist->fname = realloc(patternlist->fname, (patternlist->count) * sizeof(char*));
+    patternlist->fname[patternlist->count-1] = pattern;
+    printf("%d %s\n", patternlist->count, patternlist->fname[patternlist->count-1]);
   }
 }
+
 
 list* getFiles(list* filelist, char* filename) {
 

@@ -20,7 +20,7 @@ struct options {
 OptList* getOptions(int acount, char** args);
 void destroyOptions(OptList* opt);
 list* getPatternFromFile(list* patternlist, char* patternfile);
-list* getPattern(list* patternlist, char* pattern);
+void getPattern(list* patternlist, char* pattern);
 void destroyPatternList(list* patternlist);
 list* getFiles(list* filelist, char* filename);
 void destroyFileList(list* filelist);
