@@ -4,7 +4,7 @@
 #define PROGNAME "S21_CAT"
 
 #ifdef APPLE
-#define WRONG_OPT "%s: illegal option -- %s"
+#define WRONG_OPT "%s: illegal option -- %s\n"
 #else
 #define WRONG_OPT "%s: invalid option -- \'%s\'\n"
 #endif

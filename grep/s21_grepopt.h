@@ -17,12 +17,13 @@ struct options {
   int printonlyparts;   //-o print only the same (nonbanck) parts of strings
 };
 
-OptList* getOptions(int acount, char** args);
+//OptList* getOptions(int acount, char** args);
+void getOptions(int acount, char** args, OptList* opt);
 void destroyOptions(OptList* opt);
 list* getPatternFromFile(list* patternlist, char* patternfile);
-void getPattern(list* patternlist, char* pattern);
+list* getPattern(list* patternlist, char* pattern);
 void destroyPatternList(list* patternlist);
 list* getFiles(list* filelist, char* filename);
-void destroyFileList(list* filelist);
+//void destroyFileList(list* filelist);
 
 #endif

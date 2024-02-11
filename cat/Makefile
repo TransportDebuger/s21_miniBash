@@ -18,7 +18,7 @@ all: s21_cat
 rebuild: clean all
 
 s21_cat: ${OBJ}
-	$(OBJ) ${CC} ${CFLAGS} $(OBJ) -o ${NAME}
+	${CC} ${CFLAGS} $(OBJ) -o ${NAME}
 
 s21_cat.o: s21_cat.c
 	${CC} ${CFLAGS} -c s21_cat.c

@@ -2,15 +2,6 @@
 
 #include <stdio.h>
 
-/*void printFile(char* fname, OptList* opt) {
-    FILE* f = fopen(fname, "r");
-    if (f) {
-        char* linebuffer = NULL;
-        while (1)
-        {
-            linebuffer = fgets()
-        }
-        
-    }
-    fclose(f);
-}*/
+void printFile(const FILE* file, const OptList* opt) {
+    printf("fileprocessing");
+}
