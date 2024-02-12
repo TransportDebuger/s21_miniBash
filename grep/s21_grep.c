@@ -59,10 +59,10 @@ int main(int argc, char** argv) {
     //delete block higher after debug finish
     if (opt.filelist) {
       for (int c = opt.filelist->count-1; c >= 0; c--) {
-
+        fileprocessing(opt.filelist->fname[c], &opt);
       }
     } else {
-      printFile(stdout, &opt);
+      fileprocessing(NULL, &opt);
     }
 
     if (opt.patternlist) {

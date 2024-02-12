@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "../common/s21_ctypedef.h"
 
-void printFile(const FILE* file, const OptList* opt);
+void fileprocessing(char* fname, const OptList* opt);
+int isSubstrFound(char* str, char* pattern);
 
 #endif
