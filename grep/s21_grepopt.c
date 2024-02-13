@@ -40,7 +40,7 @@ void getOptions(int acount, char** args, OptList* opt) {
         opt->invertcondition = 1;
         break;
       case 'c':
-        opt->showlinenumber = 1;
+        opt->showlinecount = 1;
         break;
       case 'l':
         opt->showsamefiles = 1;

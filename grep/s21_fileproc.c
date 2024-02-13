@@ -10,13 +10,13 @@
 
 void fileprocessing(char* fname, const OptList* opt) {
     FILE* f;
-    int strcount = 0;
+    int strcount = 0, matchcount = 0;
 
     if (!fname) {
       f = stdin;
     } else {
       f = fopen(fname, "r");
-      if (!f){
+      if (!f && !(opt->suppreswarnings)){
         printErrorMsg(PROGNAME, WRONG_FILE, fname);
       }
     }
@@ -31,20 +31,27 @@ void fileprocessing(char* fname, const OptList* opt) {
           int m = isSubstrFound(str, opt->patternlist->fname[i]);
           if (m == 1 && !(opt->invertcondition)) {
             match = 1;
+            matchcount++;
             break;
           } else if (m == 0 && opt->invertcondition) {
             match = 1;
           } else if (m == 1 && opt->invertcondition) {
             match = 0;
+            matchcount++;
             break;
           }
         }
-        if (match) {
-          if (fname && opt->filelist->count > 1) printf("%s:", fname);
-          else if (!(fname) && opt->filelist->count > 1) printf("(standard input):");
+        if (match && !(opt->showsamefiles) && !(opt->showlinecount)) {
+          if (fname && opt->filelist->count > 1 && !(opt->showonlystrings)) printf("%s:", fname);
+          else if (!(fname) && opt->filelist->count > 1 && !(opt->showonlystrings)) printf("(standard input):");
           if (opt->showlinenumber) printf("%d:", strcount);
           fputs(str, stdout);
         }
+      }
+      if (matchcount && opt->showsamefiles) printf("%s\n", fname);
+      else if (matchcount && opt->showlinecount) {
+        if (opt->filelist->count > 1) printf("%s:%d\n", fname, matchcount);
+        else {printf("%d\n", matchcount);}
       }
       fclose(f);
     }
