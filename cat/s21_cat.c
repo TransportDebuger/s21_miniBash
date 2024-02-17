@@ -1,13 +1,14 @@
+#include "s21_cat.h"
+
 #include <string.h>
 
-#include "s21_cat.h"
 #include "../common/s21_ctypedef.h"
 #include "../common/s21_errproc.h"
 #include "s21_catopt.h"
 #include "s21_fileproc.h"
 
 #ifndef APPLE
-  #include "s21_catmes.h"
+#include "s21_catmes.h"
 #endif
 
 int main(int argc, char** argv) {

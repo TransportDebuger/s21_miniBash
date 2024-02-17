@@ -23,9 +23,7 @@ void getOptions(int acount, char** args, OptList* opt) {
   char optleter;
   short int fstop = 0;
 
-  while ((optleter = getopt_long(acount, args, shortopt, longopt, NULL)) !=
-             -1 &&
-         !fstop) {
+  while ((optleter = getopt_long(acount, args, shortopt, longopt, NULL)) != -1 && !fstop) {
     switch (optleter) {
       case 'e':
         opt->patternlist = getPattern(opt->patternlist, optarg);
@@ -59,6 +57,7 @@ void getOptions(int acount, char** args, OptList* opt) {
         break;
       case '?':
         printErrorMsg(PROGNAME, WRONG_OPT, &optleter);
+        [[fallthrough]];
       default:
         printf(USAGE_MSG);
         fstop = 1;
@@ -102,9 +101,8 @@ list* getPattern(list* patternlist, char* pattern) {
   }
   if (pl) {
     pl->count++;
-    pl->fname =
-        realloc(pl->fname, (pl->count) * sizeof(char *));
-    char* p = malloc(sizeof(char) * (strlen(pattern)+1));
+    pl->fname = realloc(pl->fname, (pl->count) * sizeof(char*));
+    char* p = malloc(sizeof(char) * (strlen(pattern) + 1));
     strcpy(p, pattern);
     pl->fname[pl->count - 1] = p;
   }
@@ -114,20 +112,16 @@ list* getPattern(list* patternlist, char* pattern) {
 
 list* getFiles(list* filelist, char* filename) {
   list* fl = filelist;
-  printf("%p ", fl);
   if (!fl) {
     fl = malloc(sizeof(list));
   }
-  printf("%p\n", fl);
   if (fl) {
     fl->count++;
-    fl->fname = realloc(fl->fname, fl->count * sizeof(char *));
-    char* fn = malloc(sizeof(char) * (strlen(filename)+1));
+    fl->fname = realloc(fl->fname, fl->count * sizeof(char*));
+    char* fn = malloc(sizeof(char) * (strlen(filename) + 1));
     strcpy(fn, filename);
     fl->fname[fl->count - 1] = fn;
   }
 
   return fl;
 }
-
-void destroyFileList(list* filelist) {}

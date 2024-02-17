@@ -30,7 +30,9 @@ int main(int argc, char** argv) {
     if (opt.patternlist) {
       int c = argc - 1;
       while (c >= 1 && argv[c][0] != '-') {
-        if (strcmp(argv[c-1], "-e") != 0 && strcmp(argv[c-1], "-f") != 0 && strcmp(argv[c-1], "--regexp") != 0 && strcmp(argv[c-1], "--file") != 0) {
+        if (strcmp(argv[c - 1], "-e") != 0 && strcmp(argv[c - 1], "-f") != 0 &&
+            strcmp(argv[c - 1], "--regexp") != 0 &&
+            strcmp(argv[c - 1], "--file") != 0) {
           opt.filelist = getFiles(opt.filelist, argv[c]);
         }
         c--;
@@ -38,7 +40,7 @@ int main(int argc, char** argv) {
     } else {
       int c = argc - 1;
       while (c >= 1 && argv[c][0] != '-') {
-        if (argv[c-1][0] != '-' && c > 1) {
+        if (argv[c - 1][0] != '-' && c > 1) {
           opt.filelist = getFiles(opt.filelist, argv[c]);
         } else {
           opt.patternlist = getPattern(opt.patternlist, argv[c]);
@@ -46,19 +48,10 @@ int main(int argc, char** argv) {
         c--;
       }
     }
-    //debug printing. delete after finish coding
-    for (int c = 0; c < opt.patternlist->count; c++) {
-        printf("%p %s\n", opt.patternlist->fname[c], opt.patternlist->fname[c]);
-    }
 
     if (opt.filelist) {
-      for (int c = 0; c < opt.filelist->count; c++) {
-        printf("%s\n", opt.filelist->fname[c]);
-      }
-    }
-    //delete block higher after debug finish
-    if (opt.filelist) {
-      for (int c = opt.filelist->count-1; c >= 0; c--) {
+      for (int c = opt.filelist->count - 1; c >= 0; c--) {
+        printf("enter fproc %d\n", c);
         fileprocessing(opt.filelist->fname[c], &opt);
       }
     } else {
@@ -72,11 +65,13 @@ int main(int argc, char** argv) {
       if (opt.patternlist->fname) free(opt.patternlist->fname);
       free(opt.patternlist);
     }
-    if (opt.filelist) {for (int c = 0; c < opt.filelist->count; c++) {
+    if (opt.filelist) {
+      for (int c = 0; c < opt.filelist->count; c++) {
         if (opt.filelist->fname[c]) free(opt.filelist->fname[c]);
       }
       if (opt.filelist->fname) free(opt.filelist->fname);
-      free(opt.filelist);}
+      free(opt.filelist);
+    }
   }
 
   return errCode;

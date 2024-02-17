@@ -20,11 +20,11 @@ OptList* parseOptions(const int pcount, char** pArgs) {
           opt = NULL;
           break;
         }
-        #ifndef APPLE
+#ifndef APPLE
         if (opt->help == 1 || opt->version == 1) {
           break;
         }
-        #endif
+#endif
       }
     }
   }
