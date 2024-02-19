@@ -18,18 +18,22 @@ void printSymbol(char c, OptList* popt) {
       printf("^I");
     else
       putc(c, stdout);
-  } else if ((c & HIGHBIT)) {
+  } else if ((c & HIGHBIT) && popt->shownpr) { 
     printf("M-");
     c = (c & (~HIGHBIT));
+    if (c < 32 || c == 127)
+      printf("^%c", c + 64);
+    else
+      putchar(c);
+  } else if (popt->shownpr) {
     if (c < 32)
       printf("^%c", c + 64);
+    else if (c == 127)
+      printf("^%c", c - 128 + 64);
     else
       putchar(c);
   } else {
-    if (c < 32)
-      printf("^%c", c + 64);
-    else
-      putchar(c);
+    putc(c, stdout);
   }
 }
 
