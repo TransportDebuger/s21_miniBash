@@ -5,7 +5,7 @@
 
 #include "../common/s21_ctypedef.h"
 
-void fileprocessing(char* fname, const OptList* opt);
+void fileprocessing(char* pStr, const OptList* opt);
 int ismatch(char* str, char* pattern, int CFlag);
 
 #endif

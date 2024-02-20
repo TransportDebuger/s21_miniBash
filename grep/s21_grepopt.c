@@ -1,6 +1,8 @@
+#define _GNU_SOURCE
 #include "s21_grepopt.h"
 
 #include <getopt.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -23,13 +25,15 @@ void getOptions(int acount, char** args, OptList* opt) {
   char optleter;
   short int fstop = 0;
 
-  while ((optleter = getopt_long(acount, args, shortopt, longopt, NULL)) != -1 && !fstop) {
+  while ((optleter = getopt_long(acount, args, shortopt, longopt, NULL)) !=
+             -1 &&
+         !fstop) {
     switch (optleter) {
       case 'e':
-        opt->patternlist = getPattern(opt->patternlist, optarg);
+        // opt->pattern = getPattern(opt->pattern, optarg);
         break;
       case 'f':
-        opt->patternlist = getPatternFromFile(opt->patternlist, optarg);
+        opt->pattern = getPatternFromFile(opt->pattern, optarg);
         break;
       case 'i':
         opt->caseinsensitive = 1;
@@ -65,23 +69,29 @@ void getOptions(int acount, char** args, OptList* opt) {
   }
 }
 
-void destroyOptions(OptList* opt) {
+/*void destroyOptions(OptList* opt) {
   if (opt != NULL) {
-    if (opt->patternlist) free(opt->patternlist);
+    if (opt->pattern) free(opt->pattern);
     free(opt);
   }
-}
+}*/
 
-list* getPatternFromFile(list* patternlist, char* patternfile) {
-  list* pl = patternlist;
+char* getPatternFromFile(char* patterns, char* patternfile) {
+  char* pl = patterns;
   static int wasFile = 0;
   if (!wasFile) {
     FILE* pf = fopen(patternfile, "r");
+
     if (pf) {
+      char* str = NULL;
+      size_t memlen = 0;
+
       while (feof(pf) == 0) {
-        char str[256];
-        pl = getPattern(pl, fgets(str, sizeof(str), pf));
+        int read = getline(&str, &memlen, pf);
+        if (str[read - 1] == '\n') str[read - 1] = '\0';
+        pl = getPattern(pl, str);
       }
+      if (str) free(str);
     } else {
       printErrorMsg(PROGNAME, WRONG_FILE, patternfile);
     }
@@ -92,19 +102,24 @@ list* getPatternFromFile(list* patternlist, char* patternfile) {
   return pl;
 }
 
-list* getPattern(list* patternlist, char* pattern) {
-  list* pl = patternlist;
+char* getPattern(char* patterns, char* pattern) {
+  char* pl = patterns;
+  char delim = '|';
+
   if (!pl) {
-    pl = malloc(sizeof(list));
-    pl->count = 0;
-    pl->fname = NULL;
+    pl = malloc(sizeof(char));
   }
   if (pl) {
-    pl->count++;
-    pl->fname = realloc(pl->fname, (pl->count) * sizeof(char*));
-    char* p = malloc(sizeof(char) * (strlen(pattern) + 1));
-    strcpy(p, pattern);
-    pl->fname[pl->count - 1] = p;
+    if (strlen(pl) == 0) {
+      pl = realloc(pl, (strlen(pattern) + 1) * sizeof(char));
+      strcpy(pl, pattern);
+    } else {
+      char* p = malloc(sizeof(char) * (strlen(pattern) + 2));
+      strcpy(p, &delim);
+      strcat(p, pattern);
+      pl = realloc(pl, (strlen(pl) + strlen(p) + 1) * sizeof(char));
+      strcat(pl, p);
+    }
   }
 
   return pl;
@@ -117,10 +132,10 @@ list* getFiles(list* filelist, char* filename) {
   }
   if (fl) {
     fl->count++;
-    fl->fname = realloc(fl->fname, fl->count * sizeof(char*));
+    fl->pStr = realloc(fl->pStr, fl->count * sizeof(char*));
     char* fn = malloc(sizeof(char) * (strlen(filename) + 1));
     strcpy(fn, filename);
-    fl->fname[fl->count - 1] = fn;
+    fl->pStr[fl->count - 1] = fn;
   }
 
   return fl;

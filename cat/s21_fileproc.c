@@ -18,7 +18,7 @@ void printSymbol(char c, OptList* popt) {
       printf("^I");
     else
       putc(c, stdout);
-  } else if ((c & HIGHBIT) && popt->shownpr) { 
+  } else if ((c & HIGHBIT) && popt->shownpr) {
     printf("M-");
     c = (c & (~HIGHBIT));
     if (c < 32 || c == 127)

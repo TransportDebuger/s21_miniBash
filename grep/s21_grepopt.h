@@ -1,11 +1,13 @@
 #ifndef S21_GREPOPT_H
 #define S21_GREPOPT_H
 
+#include <stdio.h>
+
 #include "../common/s21_ctypedef.h"
 
 struct options {
   list* filelist;
-  list* patternlist;    //-e template
+  char* pattern;        //-e template
   int caseinsensitive;  //-i ignore case diffrence;
   int invertcondition;  //-v invert condition of search
   int showlinecount;    //-c show number of same lines
@@ -19,9 +21,9 @@ struct options {
 
 void getOptions(int acount, char** args, OptList* opt);
 void destroyOptions(OptList* opt);
-list* getPatternFromFile(list* patternlist, char* patternfile);
-list* getPattern(list* patternlist, char* pattern);
-void destroyPatternList(list* patternlist);
+char* getPatternFromFile(char* patterns, char* patternfile);
+char* getPattern(char* patterns, char* pattern);
+void destroypattern(char* pattern);
 list* getFiles(list* filelist, char* filename);
 
 #endif

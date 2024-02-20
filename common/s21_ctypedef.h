@@ -5,7 +5,7 @@ typedef struct options OptList;
 
 typedef struct stringlist {
   int count;
-  char** fname;
+  char** pStr;
 } list;
 
 #endif

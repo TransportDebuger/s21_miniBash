@@ -12,7 +12,7 @@
 int main(int argc, char** argv) {
   int errCode = 0;
   OptList opt = {.filelist = NULL,
-                 .patternlist = NULL,
+                 .pattern = NULL,
                  .caseinsensitive = 0,
                  .invertcondition = 0,
                  .printonlyparts = 0,
@@ -27,7 +27,8 @@ int main(int argc, char** argv) {
     printErrorMsg("", USAGE_MSG, "");
   } else {
     getOptions(argc, argv, &opt);
-    if (opt.patternlist) {
+    printf("%s\n", opt.pattern);
+    /*if (opt.pattern) {
       int c = argc - 1;
       while (c >= 1 && argv[c][0] != '-') {
         if (strcmp(argv[c - 1], "-e") != 0 && strcmp(argv[c - 1], "-f") != 0 &&
@@ -43,35 +44,35 @@ int main(int argc, char** argv) {
         if (argv[c - 1][0] != '-' && c > 1) {
           opt.filelist = getFiles(opt.filelist, argv[c]);
         } else {
-          opt.patternlist = getPattern(opt.patternlist, argv[c]);
+          opt.pattern = getPattern(opt.pattern, argv[c]);
         }
         c--;
       }
-    }
+    }*/
 
-    if (opt.filelist) {
+    /*if (opt.filelist) {
       for (int c = opt.filelist->count - 1; c >= 0; c--) {
         printf("enter fproc %d\n", c);
-        fileprocessing(opt.filelist->fname[c], &opt);
+        fileprocessing(opt.filelist->pStr[c], &opt);
       }
     } else {
       fileprocessing(NULL, &opt);
-    }
+    }*/
 
-    if (opt.patternlist) {
-      for (int c = 0; c < opt.patternlist->count; c++) {
-        if (opt.patternlist->fname[c]) free(opt.patternlist->fname[c]);
+    /*if (opt.pattern) {
+      for (int c = 0; c < opt.pattern->count; c++) {
+        if (opt.pattern->pStr[c]) free(opt.pattern->pStr[c]);
       }
-      if (opt.patternlist->fname) free(opt.patternlist->fname);
-      free(opt.patternlist);
+      if (opt.pattern->pStr) free(opt.pattern->pStr);
+      free(opt.pattern);
     }
     if (opt.filelist) {
       for (int c = 0; c < opt.filelist->count; c++) {
-        if (opt.filelist->fname[c]) free(opt.filelist->fname[c]);
+        if (opt.filelist->pStr[c]) free(opt.filelist->pStr[c]);
       }
-      if (opt.filelist->fname) free(opt.filelist->fname);
+      if (opt.filelist->pStr) free(opt.filelist->pStr);
       free(opt.filelist);
-    }
+    }*/
   }
 
   return errCode;
