@@ -1,7 +1,9 @@
+#define _GNU_SOURCE
 #include "s21_fileproc.h"
 
 #include <regex.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "../common/s21_ctypedef.h"
@@ -9,85 +11,81 @@
 #include "s21_grep.h"
 #include "s21_grepopt.h"
 
-void fileprocessing(char* pStr, const OptList* opt) {
+void fileprocessing(char* filename, char* patterns, const OptList* opt, int filecount) {
   FILE* f;
   int strcount = 0, matchcount = 0;
 
-  if (!pStr) {
+  if (!filename) {
     f = stdin;
   } else {
-    f = fopen(pStr, "r");
+    f = fopen(filename, "r");
     if (!f && !(opt->suppreswarnings)) {
-      printErrorMsg(PROGNAME, WRONG_FILE, pStr);
+      printErrorMsg(PROGNAME, WRONG_FILE, filename);
     }
   }
 
   if (f) {
     while (feof(f) == 0) {
-      char str[256];
-      fgets(str, sizeof(str), f);
+      char* str = NULL;
+      size_t memlen = 0;
+      getline(&str, &memlen, f);
       strcount++;
       int match = 0;
-      for (int i = 0; i < opt->pattern->count; i++) {
-        int m;
-        if (opt->caseinsensitive)
-          m = ismatch(str, opt->pattern->pStr[i], 1);
-        else
-          m = ismatch(str, opt->pattern->pStr[i], 0);
-        printf("m1\n");
-        if (m == 0 && !(opt->invertcondition)) {
-          match = 1;
-          matchcount++;
-          break;
-        } else if (m == 1 && opt->invertcondition) {
-          match = 1;
-        } else if (m == 0 && opt->invertcondition) {
-          match = 0;
-          matchcount++;
-          break;
-        }
+      int m;
+      
+      if (opt->caseinsensitive)
+        m = ismatch(str, patterns, 1);
+      else
+        m = ismatch(str, patterns, 0);
+
+      if (m == 0 && !(opt->invertcondition)) {
+        match = 1;
+        matchcount++;
+      } else if (m == 1 && opt->invertcondition) {
+        match = 1;
+        matchcount++;
       }
+
       if (match && !(opt->showsamefiles) && !(opt->showlinecount)) {
-        if (pStr && opt->filelist->count > 1 && !(opt->showonlystrings))
-          printf("%s:", pStr);
-        else if (!(pStr) && opt->filelist->count > 1 && !(opt->showonlystrings))
+        if (filename && filecount > 1 && !(opt->showonlystrings))
+          printf("%s:", filename);
+        else if (!(filename) && filecount > 1 && !(opt->showonlystrings))
           printf("(standard input):");
         if (opt->showlinenumber) printf("%d:", strcount);
-        fputs(str, stdout);
+          fputs(str, stdout);
       }
+      free(str);
     }
+
     if (matchcount && opt->showsamefiles)
-      printf("%s\n", pStr);
+      printf("%s\n", filename);
     else if (matchcount && opt->showlinecount) {
-      if (opt->filelist->count > 1)
-        printf("%s:%d\n", pStr, matchcount);
+      if (filecount > 1)
+        printf("%s:%d\n", filename, matchcount);
       else {
         printf("%d\n", matchcount);
       }
     }
+    
     fclose(f);
   }
 }
 
 int ismatch(char* str, char* pattern, int caseinsensitive) {
   int retval = 0;
-  regex_t* re = NULL;
+  regex_t re;
   int flag = REG_EXTENDED;
 
   if (caseinsensitive) flag = (flag | REG_ICASE);
-  printf("%d\n", retval);
-  retval = regcomp(re, pattern, flag);
-  printf("%d\n", retval);
-  if (retval == 0) {
-    printf("%d\n", retval);
-    retval = regexec(re, str, 0, NULL, 0);
-  }
+  
+  if ((retval = regcomp(&re, pattern, flag)) == 0)
+      retval = regexec(&re, str, 0, NULL, 0);
 
-  regfree(re);
+  regfree(&re);
   return retval;
 }
 
-void putSubstr(char* str, char* pattern, int caseinsensitive) {
+/*v9888888888888888888888888888888888888899999999999\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\oid putSubstr(char* str, char* pattern, int caseinsensitive) {
 #define BUFSIZE 256
   regex_t re;
   regmatch_t pmatch[100];
@@ -102,8 +100,6 @@ void putSubstr(char* str, char* pattern, int caseinsensitive) {
 
   // int      eflag;
 
-  /* Компиляция шаблона */
-
   if ((status = regcomp(&re, pattern, flag)) == 0) {
     ps = str;
 
@@ -116,4 +112,4 @@ void putSubstr(char* str, char* pattern, int caseinsensitive) {
     }
     regfree(&re);
   }
-}
+}*/

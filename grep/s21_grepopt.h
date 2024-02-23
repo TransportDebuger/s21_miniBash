@@ -6,8 +6,6 @@
 #include "../common/s21_ctypedef.h"
 
 struct options {
-  list* filelist;
-  char* pattern;        //-e template
   int caseinsensitive;  //-i ignore case diffrence;
   int invertcondition;  //-v invert condition of search
   int showlinecount;    //-c show number of same lines
@@ -19,11 +17,10 @@ struct options {
   int printonlyparts;   //-o print only the same (nonbanck) parts of strings
 };
 
-void getOptions(int acount, char** args, OptList* opt);
-void destroyOptions(OptList* opt);
-char* getPatternFromFile(char* patterns, char* patternfile);
-char* getPattern(char* patterns, char* pattern);
+void getOptions(int acount, char** args, OptList* opt, char** pstr);
+void getPatternFromFile(char** patterns, char* patternfile);
+void getPattern(char** patterns, char* pattern);
 void destroypattern(char* pattern);
-list* getFiles(list* filelist, char* filename);
+void getFiles(list** filelist, char* filename);
 
 #endif

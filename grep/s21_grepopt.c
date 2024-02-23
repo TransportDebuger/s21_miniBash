@@ -9,7 +9,7 @@
 #include "../common/s21_errproc.h"
 #include "s21_grep.h"
 
-void getOptions(int acount, char** args, OptList* opt) {
+void getOptions(int acount, char** args, OptList* opt, char** pstr) {
   const char* shortopt = "e:ivclnhsof:";
   const struct option longopt[] = {{"regexp", 1, NULL, 'e'},
                                    {"ignore-case", 0, NULL, 'i'},
@@ -30,10 +30,10 @@ void getOptions(int acount, char** args, OptList* opt) {
          !fstop) {
     switch (optleter) {
       case 'e':
-        // opt->pattern = getPattern(opt->pattern, optarg);
+        getPattern(pstr, optarg);
         break;
       case 'f':
-        opt->pattern = getPatternFromFile(opt->pattern, optarg);
+        getPatternFromFile(pstr, optarg);
         break;
       case 'i':
         opt->caseinsensitive = 1;
@@ -69,15 +69,7 @@ void getOptions(int acount, char** args, OptList* opt) {
   }
 }
 
-/*void destroyOptions(OptList* opt) {
-  if (opt != NULL) {
-    if (opt->pattern) free(opt->pattern);
-    free(opt);
-  }
-}*/
-
-char* getPatternFromFile(char* patterns, char* patternfile) {
-  char* pl = patterns;
+void getPatternFromFile(char** patterns, char* patternfile) {
   static int wasFile = 0;
   if (!wasFile) {
     FILE* pf = fopen(patternfile, "r");
@@ -89,7 +81,7 @@ char* getPatternFromFile(char* patterns, char* patternfile) {
       while (feof(pf) == 0) {
         int read = getline(&str, &memlen, pf);
         if (str[read - 1] == '\n') str[read - 1] = '\0';
-        pl = getPattern(pl, str);
+        getPattern(patterns, str);
       }
       if (str) free(str);
     } else {
@@ -99,44 +91,35 @@ char* getPatternFromFile(char* patterns, char* patternfile) {
     wasFile++;
   }
 
-  return pl;
 }
 
-char* getPattern(char* patterns, char* pattern) {
-  char* pl = patterns;
-  char delim = '|';
+void getPattern(char** patterns, char* pattern) {
+  const char* delim = "|";
 
-  if (!pl) {
-    pl = malloc(sizeof(char));
+  if (!(*patterns)) {
+    *patterns = malloc(strlen(pattern)+1 * sizeof(char));
+    strcpy(*patterns, pattern);
+  } else {
+    char* p = malloc(sizeof(char) * (strlen(pattern) + 2));
+    strcpy(p, delim);
+    strcat(p, pattern);
+    *patterns = realloc(*patterns, (strlen(*patterns) + strlen(p) + 1) * sizeof(char));
+    strcat(*patterns, p);
+    free(p);
   }
-  if (pl) {
-    if (strlen(pl) == 0) {
-      pl = realloc(pl, (strlen(pattern) + 1) * sizeof(char));
-      strcpy(pl, pattern);
-    } else {
-      char* p = malloc(sizeof(char) * (strlen(pattern) + 2));
-      strcpy(p, &delim);
-      strcat(p, pattern);
-      pl = realloc(pl, (strlen(pl) + strlen(p) + 1) * sizeof(char));
-      strcat(pl, p);
-    }
-  }
-
-  return pl;
 }
 
-list* getFiles(list* filelist, char* filename) {
-  list* fl = filelist;
-  if (!fl) {
-    fl = malloc(sizeof(list));
+void getFiles(list** filelist, char* filename) {
+  if (!(*filelist)) {
+    *filelist = malloc(sizeof(list));
+    (*filelist)->count = 0;
+    (*filelist)->pStr = NULL;
   }
-  if (fl) {
-    fl->count++;
-    fl->pStr = realloc(fl->pStr, fl->count * sizeof(char*));
+  if (*filelist) {
+    (*filelist)->count++;
+    (*filelist)->pStr = realloc((*filelist)->pStr, (*filelist)->count * sizeof(char*));
     char* fn = malloc(sizeof(char) * (strlen(filename) + 1));
     strcpy(fn, filename);
-    fl->pStr[fl->count - 1] = fn;
+    (*filelist)->pStr[(*filelist)->count - 1] = fn;
   }
-
-  return fl;
 }

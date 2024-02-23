@@ -1,11 +1,9 @@
 #ifndef S21_FILEPROC_H
 #define S21_FILEPROC_H
 
-#include <stdio.h>
-
 #include "../common/s21_ctypedef.h"
 
-void fileprocessing(char* pStr, const OptList* opt);
-int ismatch(char* str, char* pattern, int CFlag);
+void fileprocessing(char* filename, char* patterns, const OptList* opt, int filecount);
+int ismatch(char* str, char* patterns, int CFlag);
 
 #endif
