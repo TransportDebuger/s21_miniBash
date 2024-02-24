@@ -29,7 +29,7 @@ void printSymbol(char c, OptList* popt) {
     if (c < 32)
       printf("^%c", c + 64);
     else if (c == 127)
-      printf("^%c", c - 128 + 64);
+      printf("^%c", c - 64);
     else
       putchar(c);
   } else {
@@ -38,8 +38,8 @@ void printSymbol(char c, OptList* popt) {
 }
 
 void printFile(FILE* inFile, OptList* popt) {
-  char c = fgetc(inFile);
-  char prevc = '\n';
+  int c = fgetc(inFile);
+  int prevc = '\n';
   static int linecount = 1;
   short int blineprn = 0;
 

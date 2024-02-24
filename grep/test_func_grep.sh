@@ -62,7 +62,7 @@ do
 done
 
 # 1 параметр
-for var1 in v c l n h
+for var1 in v c l n h o
 do
     for i in "${tests[@]}"
     do
@@ -72,9 +72,9 @@ do
 done
 
 # 2 параметра
-for var1 in v c l n h 
+for var1 in v c l n h o
 do
-    for var2 in v c l n h 
+    for var2 in v c l n h o
     do
         if [ $var1 != $var2 ]
         then
@@ -88,9 +88,9 @@ do
 done
 
 # 2 сдвоенных параметра
-for var1 in v c l n h 
+for var1 in v c l n h o
 do
-    for var2 in v c l n h 
+    for var2 in v c l n h o
     do
         if [ $var1 != $var2 ]
         then

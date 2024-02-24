@@ -93,12 +93,12 @@ void getPatternFromFile(char** patterns, char* patternfile) {
 }
 
 void getPattern(char** patterns, char* pattern) {
-  const char* delim = "|";
 
   if (!(*patterns)) {
     *patterns = malloc(strlen(pattern) + 1 * sizeof(char));
     strcpy(*patterns, pattern);
   } else {
+    const char* delim = "|";
     char* p = malloc(sizeof(char) * (strlen(pattern) + 2));
     strcpy(p, delim);
     strcat(p, pattern);

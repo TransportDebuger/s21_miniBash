@@ -34,6 +34,10 @@ int main(int argc, char** argv) {
           getPattern(&patterns, argv[c]);
         else if (argv[c][0] != '-')
           getFiles(&filelist, argv[c]);
+        else {
+          if (strlen(argv[c]) == 1)
+          getFiles(&filelist, argv[c]);
+        }
         c++;
       }
     } else {
@@ -42,7 +46,7 @@ int main(int argc, char** argv) {
         if (argv[c][0] != '-') {
           int s = strlen(argv[c - 1]);
           if (argv[c - 1][0] == '-' &&
-              (argv[c - 1][0] == 'e' || argv[c - 1][0] == 'f') &&
+              (argv[c - 1][1] == 'e' || argv[c - 1][1] == 'f') &&
               strlen(argv[c - 1]) > 2)
             getFiles(&filelist, argv[c]);
           else if (argv[c - 1][0] == '-' && argv[c - 1][s - 1] != 'e' &&
@@ -50,6 +54,10 @@ int main(int argc, char** argv) {
             getFiles(&filelist, argv[c]);
           else if (argv[c - 1][0] != '-')
             getFiles(&filelist, argv[c]);
+        } else {
+          if (strlen(argv[c]) == 1) {
+            getFiles(&filelist, argv[c]);
+          }
         }
         c++;
       }
@@ -57,10 +65,13 @@ int main(int argc, char** argv) {
 
     if (filelist) {
       for (int c = 0; c < filelist->count; c++) {
-        fileprocessing(filelist->pStr[c], patterns, &opt, filelist->count);
+        if (strcmp(filelist->pStr[c], "-") == 0)
+          fileprocessing(NULL, patterns, &opt, filelist->count);
+        else
+          fileprocessing(filelist->pStr[c], patterns, &opt, filelist->count);
       }
     } else {
-      fileprocessing(NULL, patterns, &opt, filelist->count);
+      fileprocessing(NULL, patterns, &opt, 1);
     }
 
     if (filelist) {

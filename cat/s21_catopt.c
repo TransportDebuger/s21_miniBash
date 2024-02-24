@@ -13,9 +13,10 @@ OptList* parseOptions(const int pcount, char** pArgs) {
   if (opt) {
     *opt = initOptList();
     for (int c = 1; c < pcount; c++) {
-      int err = 0;
+      int err;
       if (pArgs[c][0] == '-') {
-        if ((err = setParameters(pArgs[c], opt)) != 0) {
+        err = setParameters(pArgs[c], opt);
+        if (err != 0) {
           deallocOptList(opt);
           opt = NULL;
           break;

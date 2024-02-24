@@ -3,7 +3,7 @@ CFLAGS = -Werror -Wextra -Wall
 VPATH :=.:../common
 NAME = s21_grep
 OBJ = s21_grep.o s21_grepopt.o s21_fileproc.o s21_errproc.o
-
+TEST = ./test_func_grep.sh
 
 .PHONY: all
 
@@ -27,6 +27,11 @@ s21_fileproc.o: s21_fileproc.c
 
 s21_errproc.o: ../common/s21_errproc.c
 	${CC} ${CFLAGS} -c ../common/s21_errproc.c
+
+.PHONY: test
+
+test: all
+	$(TEST)
 
 .PHONY: clean
 

@@ -5,8 +5,11 @@ NAME = s21_cat
 OBJ = s21_cat.o s21_catopt.o s21_catmes.o s21_fileproc.o s21_errproc.o
 OS = $(shell uname)
 DFLAG = 
+TEST = ./test_func_cat.sh
 
 ifeq ($(OS), Apple) 
+	DFLAG = -D APPLE 
+else ifeq ($(OS), Darwin)
 	DFLAG = -D APPLE 
 endif
 
@@ -36,6 +39,11 @@ s21_fileproc.o: s21_fileproc.c
 
 s21_errproc.o: ../common/s21_errproc.c
 	${CC} ${CFLAGS} -c ../common/s21_errproc.c
+
+.PHONY: test
+
+test: all
+	${TEST}
 
 .PHONY: clean
 
