@@ -1,5 +1,5 @@
 CC = gcc 
-CFLAGS = -Werror -Wextra -Wall -std=c11
+CFLAGS = -Werror -Wextra -Wall
 VPATH :=.:../common
 NAME = s21_grep
 OBJ = s21_grep.o s21_grepopt.o s21_fileproc.o s21_errproc.o

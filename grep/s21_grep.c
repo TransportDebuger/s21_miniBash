@@ -27,30 +27,36 @@ int main(int argc, char** argv) {
     printErrorMsg("", USAGE_MSG, "");
   } else {
     getOptions(argc, argv, &opt, &patterns);
-    if (patterns) {
-      int c = argc - 1;
-      while (c >= 1 && argv[c][0] != '-') {
-        if (strcmp(argv[c - 1], "-e") != 0 && strcmp(argv[c - 1], "-f") != 0 &&
-            strcmp(argv[c - 1], "--regexp") != 0 &&
-            strcmp(argv[c - 1], "--file") != 0) {
-            getFiles(&filelist, argv[c]);
-        }
-        c--;
+    if (!patterns) {
+      int c = 1;
+      while (c < argc) {
+        if (argv[c][0] != '-' && !patterns)
+          getPattern(&patterns, argv[c]);
+        else if (argv[c][0] != '-')
+          getFiles(&filelist, argv[c]);
+        c++;
       }
     } else {
-      int c = argc - 1;
-      while (c >= 1 && argv[c][0] != '-') {
-        if (argv[c - 1][0] != '-' && c > 1) {
-          getFiles(&filelist, argv[c]);
-        } else {
-          getPattern(&patterns, argv[c]);
+      int c = 1;
+      while (c < argc) {
+        if (argv[c][0] != '-') {
+          int s = strlen(argv[c - 1]);
+          if (argv[c - 1][0] == '-' &&
+              (argv[c - 1][0] == 'e' || argv[c - 1][0] == 'f') &&
+              strlen(argv[c - 1]) > 2)
+            getFiles(&filelist, argv[c]);
+          else if (argv[c - 1][0] == '-' && argv[c - 1][s - 1] != 'e' &&
+                   argv[c - 1][s - 1] != 'f')
+            getFiles(&filelist, argv[c]);
+          else if (argv[c - 1][0] != '-')
+            getFiles(&filelist, argv[c]);
         }
-        c--;
+        c++;
       }
     }
-    
+
     if (filelist) {
-      for (int c = filelist->count - 1; c >= 0; c--) {
+      for (int c = 0; c < filelist->count; c++) {
         fileprocessing(filelist->pStr[c], patterns, &opt, filelist->count);
       }
     } else {
@@ -61,6 +67,7 @@ int main(int argc, char** argv) {
       for (int c = 0; c < filelist->count; c++) {
         if (filelist->pStr[c]) free(filelist->pStr[c]);
       }
+      free(filelist->pStr);
       free(filelist);
     }
     if (patterns) {

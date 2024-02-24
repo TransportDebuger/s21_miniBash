@@ -5,51 +5,27 @@ FAIL=0
 COUNTER=0
 DIFF_RES=""
 
-declare -a tests=(
+tests=(
 "VAR test_1_cat.txt"
 "VAR test_2_cat.txt"
 "VAR test_case_cat.txt"
 )
 
-declare -a extra=(
-"-s test_1_cat.txt"
-"-s test_2_cat.txt"
-"-s test_4_cat.txt"
+extra=(
+"-vETns test_3_cat.txt"
+"-vETbs test_5_cat.txt"
+"-vETns test_1_cat.txt test_2_cat.txt test_3_cat.txt test_4_cat.txt test_5_cat.txt"
+"-vETbs test_1_cat.txt test_2_cat.txt test_3_cat.txt test_4_cat.txt test_5_cat.txt"
+"-Ans test_1_cat.txt test_2_cat.txt test_3_cat.txt test_4_cat.txt test_5_cat.txt"
+"-Abs test_1_cat.txt test_2_cat.txt test_3_cat.txt test_4_cat.txt test_5_cat.txt"
 
-"-e test_1_cat.txt"
-"-e test_2_cat.txt"
-"-e test_3_cat.txt"
-"-e test_4_cat.txt"
-"-e test_5_cat.txt"
-
-"-t test_1_cat.txt"
-"-t test_2_cat.txt"
-"-t test_3_cat.txt"
-"-t test_4_cat.txt"
-"-t test_5_cat.txt"
-
-"-n test_1_cat.txt"
-"-n test_2_cat.txt"
-"-n test_3_cat.txt"
-"-n test_4_cat.txt"
-"-n test_5_cat.txt"
-
-"-b test_1_cat.txt"
-"-b test_2_cat.txt"
-"-b test_3_cat.txt"
-"-b test_4_cat.txt"
-"-b test_5_cat.txt"
-
-"-v test_3_cat.txt"
-"-v test_5_cat.txt"
-
-"-n -b test_1_cat.txt"
+"-b -n test_1_cat.txt"
 "-s -n -e test_4_cat.txt"
 
 )
 testing() 
 {
-    t=$(echo $@ | sed "s/VAR/$var/")
+    t=$(echo $i | sed "s/VAR/$var/")
     ./s21_cat $t > test_s21_cat.log
     cat $t > test_sys_cat.log
     DIFF_RES="$(diff -s test_s21_cat.log test_sys_cat.log)"
@@ -57,10 +33,10 @@ testing()
     if [ "$DIFF_RES" == "Files test_s21_cat.log and test_sys_cat.log are identical" ]
     then
       (( SUCCESS++ ))
-        echo "$FAIL/$SUCCESS/$COUNTER \033[32msuccess\033[0m cat $t"
+        echo "$FAIL/$SUCCESS/$COUNTER [success] cat $t"
     else
       (( FAIL++ ))
-        echo "$FAIL/$SUCCESS/$COUNTER \033[31mfail\033[0m cat $t"
+        echo "$FAIL/$SUCCESS/$COUNTER [fail] cat $t"
     fi
     rm test_s21_cat.log test_sys_cat.log
 }

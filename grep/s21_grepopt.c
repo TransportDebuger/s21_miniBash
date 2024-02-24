@@ -90,20 +90,20 @@ void getPatternFromFile(char** patterns, char* patternfile) {
     if (pf) fclose(pf);
     wasFile++;
   }
-
 }
 
 void getPattern(char** patterns, char* pattern) {
   const char* delim = "|";
 
   if (!(*patterns)) {
-    *patterns = malloc(strlen(pattern)+1 * sizeof(char));
+    *patterns = malloc(strlen(pattern) + 1 * sizeof(char));
     strcpy(*patterns, pattern);
   } else {
     char* p = malloc(sizeof(char) * (strlen(pattern) + 2));
     strcpy(p, delim);
     strcat(p, pattern);
-    *patterns = realloc(*patterns, (strlen(*patterns) + strlen(p) + 1) * sizeof(char));
+    *patterns =
+        realloc(*patterns, (strlen(*patterns) + strlen(p) + 1) * sizeof(char));
     strcat(*patterns, p);
     free(p);
   }
@@ -117,7 +117,8 @@ void getFiles(list** filelist, char* filename) {
   }
   if (*filelist) {
     (*filelist)->count++;
-    (*filelist)->pStr = realloc((*filelist)->pStr, (*filelist)->count * sizeof(char*));
+    (*filelist)->pStr =
+        realloc((*filelist)->pStr, (*filelist)->count * sizeof(char*));
     char* fn = malloc(sizeof(char) * (strlen(filename) + 1));
     strcpy(fn, filename);
     (*filelist)->pStr[(*filelist)->count - 1] = fn;

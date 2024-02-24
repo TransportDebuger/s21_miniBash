@@ -11,7 +11,8 @@
 #include "s21_grep.h"
 #include "s21_grepopt.h"
 
-void fileprocessing(char* filename, char* patterns, const OptList* opt, int filecount) {
+void fileprocessing(char* filename, char* patterns, const OptList* opt,
+                    int filecount) {
   FILE* f;
   int strcount = 0, matchcount = 0;
 
@@ -32,7 +33,7 @@ void fileprocessing(char* filename, char* patterns, const OptList* opt, int file
       strcount++;
       int match = 0;
       int m;
-      
+
       if (opt->caseinsensitive)
         m = ismatch(str, patterns, 1);
       else
@@ -52,21 +53,21 @@ void fileprocessing(char* filename, char* patterns, const OptList* opt, int file
         else if (!(filename) && filecount > 1 && !(opt->showonlystrings))
           printf("(standard input):");
         if (opt->showlinenumber) printf("%d:", strcount);
-          fputs(str, stdout);
+        fputs(str, stdout);
+        if (str[strlen(str) - 1] != '\n') fputs("\n", stdout);
       }
       free(str);
     }
 
     if (matchcount && opt->showsamefiles)
       printf("%s\n", filename);
-    else if (matchcount && opt->showlinecount) {
-      if (filecount > 1)
+    else if (opt->showlinecount && !(opt->showsamefiles)) {
+      if (filecount > 1 && !(opt->showonlystrings))
         printf("%s:%d\n", filename, matchcount);
       else {
         printf("%d\n", matchcount);
       }
     }
-    
     fclose(f);
   }
 }
@@ -77,15 +78,15 @@ int ismatch(char* str, char* pattern, int caseinsensitive) {
   int flag = REG_EXTENDED;
 
   if (caseinsensitive) flag = (flag | REG_ICASE);
-  
-  if ((retval = regcomp(&re, pattern, flag)) == 0)
-      retval = regexec(&re, str, 0, NULL, 0);
 
-  regfree(&re);
+  if ((retval = regcomp(&re, pattern, flag)) == 0) {
+    retval = regexec(&re, str, 0, NULL, 0);
+    regfree(&re);
+  }
   return retval;
 }
 
-/*v9888888888888888888888888888888888888899999999999\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\oid putSubstr(char* str, char* pattern, int caseinsensitive) {
+/*void putSubstr(char* str, char* pattern, int caseinsensitive) {
 #define BUFSIZE 256
   regex_t re;
   regmatch_t pmatch[100];
