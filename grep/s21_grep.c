@@ -35,8 +35,7 @@ int main(int argc, char** argv) {
         else if (argv[c][0] != '-')
           getFiles(&filelist, argv[c]);
         else {
-          if (strlen(argv[c]) == 1)
-          getFiles(&filelist, argv[c]);
+          if (strlen(argv[c]) == 1) getFiles(&filelist, argv[c]);
         }
         c++;
       }

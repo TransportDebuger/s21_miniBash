@@ -57,7 +57,7 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
   char* str = NULL;
   size_t memlen = 0;
   ssize_t read = 0;
-  
+
   while ((read = getline(&str, &memlen, f)) != -1) {
     regmatch_t* rm = malloc(sizeof(regex_t) * (re->re_nsub + 1));
     strcount++;
