@@ -54,11 +54,11 @@ int regex_compile(regex_t* re, char* patterns, int caseinsensitive) {
 void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
                 char* filename) {
   int strcount = 0, matchcount = 0;
-
+  char* str = NULL;
+  
   getline(&str, &memlen, f);
   while (feof(f) == 0) {
     regmatch_t* rm = malloc(sizeof(regex_t) * (re->re_nsub + 1));
-    char* str = NULL;
     size_t memlen = 0;
     strcount++;
     int match = 0;
@@ -103,7 +103,6 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
         //}
       }
     }
-    free(str);
     getline(&str, &memlen, f);
     if (rm) free(rm);
   }
@@ -117,6 +116,6 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
       printf("%d\n", matchcount);
     }
   }
-
+  if (str) free(str);
   fclose(f);
 }
