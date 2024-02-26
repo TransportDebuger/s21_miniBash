@@ -55,11 +55,11 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
                 char* filename) {
   int strcount = 0, matchcount = 0;
 
+  getline(&str, &memlen, f);
   while (feof(f) == 0) {
     regmatch_t* rm = malloc(sizeof(regex_t) * (re->re_nsub + 1));
     char* str = NULL;
     size_t memlen = 0;
-    getline(&str, &memlen, f);
     strcount++;
     int match = 0;
     int m;
@@ -104,6 +104,7 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
       }
     }
     free(str);
+    getline(&str, &memlen, f);
     if (rm) free(rm);
   }
 
