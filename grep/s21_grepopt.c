@@ -77,11 +77,11 @@ void getPatternFromFile(char** patterns, char* patternfile) {
     if (pf) {
       char* str = NULL;
       size_t memlen = 0;
+      int read;
 
-      while (feof(pf) == 0) {
-        int read = getline(&str, &memlen, pf);
+      while ((read = getline(&str, &memlen, pf)) != -1) {
         if (str[read - 1] == '\n') str[read - 1] = '\0';
-        getPattern(patterns, str);
+        if (strlen(str) != 0) getPattern(patterns, str);
       }
       if (str) free(str);
     } else {
@@ -93,9 +93,8 @@ void getPatternFromFile(char** patterns, char* patternfile) {
 }
 
 void getPattern(char** patterns, char* pattern) {
-
   if (!(*patterns)) {
-    *patterns = malloc(strlen(pattern) + 1 * sizeof(char));
+    *patterns = malloc((strlen(pattern) + 1) * sizeof(char));
     strcpy(*patterns, pattern);
   } else {
     const char* delim = "|";

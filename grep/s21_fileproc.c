@@ -54,12 +54,12 @@ int regex_compile(regex_t* re, char* patterns, int caseinsensitive) {
 void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
                 char* filename) {
   int strcount = 0, matchcount = 0;
-
-  while (feof(f) == 0) {
+  char* str = NULL;
+  size_t memlen = 0;
+  ssize_t read = 0;
+  
+  while ((read = getline(&str, &memlen, f)) != -1) {
     regmatch_t* rm = malloc(sizeof(regex_t) * (re->re_nsub + 1));
-    char* str = NULL;
-    size_t memlen = 0;
-    getline(&str, &memlen, f);
     strcount++;
     int match = 0;
     int m;
@@ -87,8 +87,6 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
         fputs(str, stdout);
         if (str[strlen(str) - 1] != '\n') fputs("\n", stdout);
       } else {
-        // printf("%lu::", re->re_nsub);
-        // for (size_t i = 0; i < re->re_nsub; i++) {
         if (!(opt->invertcondition)) {
           if (filename && filecount > 1 && !(opt->showonlystrings))
             printf("%s:", filename);
@@ -100,10 +98,8 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
           }
           printf("\n");
         }
-        //}
       }
     }
-    free(str);
     if (rm) free(rm);
   }
 
@@ -116,6 +112,6 @@ void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
       printf("%d\n", matchcount);
     }
   }
-
+  if (str) free(str);
   fclose(f);
 }

@@ -1,10 +1,8 @@
 #!/bin/bash
-
 SUCCESS=0
 FAIL=0
 COUNTER=0
 DIFF_RES=""
-
 declare -a tests=(
 "VAR s test_0_grep.txt"
 "VAR for s21_grep.c s21_grep.h Makefile"
@@ -14,7 +12,6 @@ declare -a tests=(
 "VAR -e regex -e ^print s21_grep.c -f test_ptrn_grep.txt"
 "VAR -e while -e void s21_grep.c Makefile -f test_ptrn_grep.txt"
 )
-
 declare -a extra=(
 "-n for test_1_grep.txt test_2_grep.txt"
 "-n for test_1_grep.txt"
@@ -41,6 +38,7 @@ testing()
     t=$(echo -E $@ | sed "s/VAR/$var/")
     ./s21_grep $t > test_s21_grep.log
     grep $t > test_sys_grep.log
+    #valgrind ./s21_grep $t
     DIFF_RES="$(diff -s test_s21_grep.log test_sys_grep.log)"
     (( COUNTER++ ))
     if [ "$DIFF_RES" == "Files test_s21_grep.log and test_sys_grep.log are identical" ]
