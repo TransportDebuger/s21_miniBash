@@ -28,6 +28,7 @@ testing()
     t=$(echo $i | sed "s/VAR/$var/")
     ./s21_cat $t > test_s21_cat.log
     cat $t > test_sys_cat.log
+   #valgrind --leak-check=yes ./s21_cat $t
     DIFF_RES="$(diff -s test_s21_cat.log test_sys_cat.log)"
     (( COUNTER++ ))
     if [ "$DIFF_RES" == "Files test_s21_cat.log and test_sys_cat.log are identical" ]

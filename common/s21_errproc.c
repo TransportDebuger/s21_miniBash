@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 
-void printErrorMsg(char* progname, char* errMsg, char* errValue) {
+void printErrorMsg(const char* progname, const char* errMsg,
+                   const char* errValue) {
   printf(errMsg, progname, errValue);
 }

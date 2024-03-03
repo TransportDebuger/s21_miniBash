@@ -11,7 +11,7 @@
 #include "s21_grep.h"
 #include "s21_grepopt.h"
 
-void fileprocessing(char* filename, char* patterns, const OptList* opt,
+void fileprocessing(const char* filename, char* patterns, const OptList* opt,
                     int filecount) {
   FILE* f;
   regex_t re;
@@ -52,7 +52,7 @@ int regex_compile(regex_t* re, char* patterns, int caseinsensitive) {
 }
 
 void print_file(FILE* f, const OptList* opt, regex_t* re, int filecount,
-                char* filename) {
+                const char* filename) {
   int strcount = 0, matchcount = 0;
   char* str = NULL;
   size_t memlen = 0;

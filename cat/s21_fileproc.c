@@ -7,7 +7,7 @@
 
 #define HIGHBIT 128
 
-void printSymbol(char c, OptList* popt) {
+void printSymbol(char c, const OptList* popt) {
   if (c == '\n') {
     if (popt->showends)
       printf("$\n");
@@ -37,7 +37,7 @@ void printSymbol(char c, OptList* popt) {
   }
 }
 
-void printFile(FILE* inFile, OptList* popt) {
+void printFile(FILE* inFile, const OptList* popt) {
   int c = fgetc(inFile);
   int prevc = '\n';
   static int linecount = 1;

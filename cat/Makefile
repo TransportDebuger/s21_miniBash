@@ -43,6 +43,7 @@ s21_errproc.o: ../common/s21_errproc.c
 .PHONY: test
 
 test: all
+	chmod ugo+x ${TEST}
 	${TEST}
 
 .PHONY: clean

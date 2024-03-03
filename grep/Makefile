@@ -16,10 +16,10 @@ rebuild: clean all
 s21_grep: ${OBJ}
 	${CC} ${CFLAGS} $(OBJ) -o ${NAME}
 
-s21_cat.o: s21_grep.c
+s21_grep.o: s21_grep.c
 	${CC} ${CFLAGS} ${DFLAG} -c s21_grep.c
 
-s21_catopt.o: s21_grepopt.c
+s21_grepopt.o: s21_grepopt.c
 	${CC} ${CFLAGS} $(DFLAG) -c s21_grepopt.c
 
 s21_fileproc.o: s21_fileproc.c
@@ -31,6 +31,7 @@ s21_errproc.o: ../common/s21_errproc.c
 .PHONY: test
 
 test: all
+	chmod ugo+x ${TEST}
 	$(TEST)
 
 .PHONY: clean

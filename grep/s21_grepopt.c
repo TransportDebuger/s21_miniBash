@@ -61,7 +61,9 @@ void getOptions(int acount, char** args, OptList* opt, char** pstr) {
         break;
       case '?':
         printErrorMsg(PROGNAME, WRONG_OPT, &optleter);
-        [[fallthrough]];
+        printf(USAGE_MSG);
+        fstop = 1;
+        break;
       default:
         printf(USAGE_MSG);
         fstop = 1;
@@ -69,7 +71,7 @@ void getOptions(int acount, char** args, OptList* opt, char** pstr) {
   }
 }
 
-void getPatternFromFile(char** patterns, char* patternfile) {
+void getPatternFromFile(char** patterns, const char* patternfile) {
   static int wasFile = 0;
   if (!wasFile) {
     FILE* pf = fopen(patternfile, "r");
@@ -92,7 +94,7 @@ void getPatternFromFile(char** patterns, char* patternfile) {
   }
 }
 
-void getPattern(char** patterns, char* pattern) {
+void getPattern(char** patterns, const char* pattern) {
   if (!(*patterns)) {
     *patterns = malloc((strlen(pattern) + 1) * sizeof(char));
     strcpy(*patterns, pattern);
@@ -108,7 +110,7 @@ void getPattern(char** patterns, char* pattern) {
   }
 }
 
-void getFiles(list** filelist, char* filename) {
+void getFiles(list** filelist, const char* filename) {
   if (!(*filelist)) {
     *filelist = malloc(sizeof(list));
     (*filelist)->count = 0;

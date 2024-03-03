@@ -18,9 +18,9 @@ struct options {
 };
 
 void getOptions(int acount, char** args, OptList* opt, char** pstr);
-void getPatternFromFile(char** patterns, char* patternfile);
-void getPattern(char** patterns, char* pattern);
+void getPatternFromFile(char** patterns, const char* patternfile);
+void getPattern(char** patterns, const char* pattern);
 void destroypattern(char* pattern);
-void getFiles(list** filelist, char* filename);
+void getFiles(list** filelist, const char* filename);
 
 #endif

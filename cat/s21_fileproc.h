@@ -5,6 +5,6 @@
 
 #include "../common/s21_ctypedef.h"
 
-void printFile(FILE* inFile, OptList* popt);
+void printFile(FILE* inFile, const OptList* popt);
 
 #endif
